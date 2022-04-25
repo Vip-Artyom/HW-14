@@ -2,7 +2,7 @@ import sqlite3  # Импортируем библиотеку SQL
 from flask import jsonify
 
 def get_sql_connecting(query):
-    '''Подключаем базу данных SQL'''
+    """Подключаем базу данных SQL"""
     connect = sqlite3.connect("netflix.db")
     cursor = connect.cursor()
     cursor.execute(query)
@@ -12,14 +12,14 @@ def get_sql_connecting(query):
 
 
 def search_for_title(find_title):
-    '''Функция ищет фильм по названию'''
-    sqlite_query = f"""
+    """Функция ищет фильм по названию"""
+    sqlite_query = (f"""
         SELECT title, country, MAX(release_year), listed_in, description
         FROM netflix
-        WHERE title LIKE "%{find_title}%"
-        """  # код запроса
-    result_for_query = get_sql_connecting(sqlite_query)
+        WHERE title LIKE '%{find_title}%'
+        """)  # код запроса
 
+    result_for_query = get_sql_connecting(sqlite_query)
     result = {}
     for content in result_for_query:
         result['title'] = content[0]
@@ -32,7 +32,7 @@ def search_for_title(find_title):
 
 
 def search_for_year(year_1, year_2):
-    '''Функция находит фильмы в диапазоне годов'''
+    """Функция находит фильмы в диапазоне годов"""
 
     sqlite_query = (f"""
             SELECT title, release_year
@@ -55,7 +55,7 @@ def search_for_year(year_1, year_2):
 
 
 def search_for_rating(rating):
-    '''Функция находит фильмы по рейтингу'''
+    """Функция находит фильмы по рейтингу"""
 
     levels = {'children': ["G"], 'family': ["G", "PG", "PG-13"], 'adult': ["R", "NC-17"]}
     if rating in levels:
@@ -83,7 +83,7 @@ def search_for_rating(rating):
 
 
 def search_for_genre(genre):
-    '''Функция находит фильмы по жанру'''
+    """Функция находит фильмы по жанру"""
     sqlite_query = (f"""
                     SELECT title, description
                     FROM netflix
@@ -103,7 +103,7 @@ def search_for_genre(genre):
 
 
 def repeat_actors(actor_1='Jack Black', actor_2='Dustin Hoffman'):
-    '''Функция, которая получает в качестве аргумента имена двух актеров'''
+    """Функция, которая получает в качестве аргумента имена двух актеров"""
     sqlite_query = (f"""
                         SELECT "cast"
                         FROM netflix
@@ -126,8 +126,8 @@ def repeat_actors(actor_1='Jack Black', actor_2='Dustin Hoffman'):
 
 
 def search_for_arg(type_film, release_year, genre):
-    '''Функция, с помощью которой можно будет передавать тип картины (фильм или сериал),
-    год выпуска и ее жанр, на выходе список фильмов'''
+    """Функция, с помощью которой можно будет передавать тип картины (фильм или сериал),
+    год выпуска и ее жанр, на выходе список фильмов"""
     sqlite_query = (f"""
                             SELECT title, description
                             FROM netflix
